@@ -1,0 +1,11 @@
+<div ng-controller="msgrCtrl">
+    <ng-form>
+        <input type="text" ng-model="conn_url" ng-init="conn_url='ws://localhost:9002'"/>
+        <input type="submit" ng-click="connect(conn_url)" value="Connect" ng-hide="state.connected"/>
+        <input type="button" ng-click="disconnect()" value="Disconnect" ng-show="state.connected"/>
+    </ng-form>
+    <ng-form ng-show="state.connected">
+        <input type="text" ng-model="message" ng-init="message='TestMessage'"/>
+        <input type="submit" ng-click="send(message)" value="Send"/>
+    </ng-form>
+</div>
