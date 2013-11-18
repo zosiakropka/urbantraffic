@@ -6,8 +6,8 @@
         <link rel="stylesheet" href="css/app.css"/>
     </head>
     <body>
-    <ng-include src="'msgr/msgr-partial.html'"></ng-include>
-    <ng-include src="'params/params-partial.html'"></ng-include>
+        
+    <ng-include src="'elems/elems-partial.html'"></ng-include>
 
     <ng-view/>
 
@@ -15,14 +15,22 @@
     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
     -->
     <script src="lib/angular.js"></script>
+
+    <script src="lib/raphael-min.js"></script>
+
     <script src="application/application.js"></script>
     <script src="application/configuration-constants.js"></script>
+
+    <script src="elems/elems-controller.js"></script>
 
     <script src="params/params-controller.js"></script>
     <script src="params/params-service.js"></script>
 
     <script src="msgr/msgr-controller.js"></script>
     <script src="msgr/msgr-service.js"></script>
+
+    <script src="simulation/simulation-controller.js"></script>
+    <script src="simulation/simulation-service.js"></script>
 
     <script src="error/error-controller.js"></script>
 </body>

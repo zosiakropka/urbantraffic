@@ -13,39 +13,16 @@ Application.Services.factory('msgrSrvc', ["$q", "$rootScope", function($q, $root
         var callbacks = {};
 
         var register = function(purpose, callback) {
+            console.debug("msgrSrvc: " + purpose + " purpose registered.");
             if (!callbacks[purpose]) {
                 callbacks[purpose] = [];
             }
             callbacks[purpose].push(callback);
         };
-        var configure = function() {
-            socket.onopen = function() {
-                apply(function() {
-                    state.connected = true;
-                });
-                log();
-            };
-            socket.onclose = function() {
-                apply(function() {
-                    state.connected = false;
-                });
-                log();
-            };
-            socket.onmessage = function(data) {
-                console.log(data);
-                var purpose = "";
-                var message = "";
-                console.error("OnMessage not implemented");
-                var callback = callbacks[purpose];
-                for (var i in callbacks) {
-                    callbacks[i](message);
-                }
-            };
-        };
-        var log = function() {
-            var label = "msgrService: "
+        var logConnection = function() {
+            var label = "msgrService: ";
             if (!(socket && socket instanceof WebSocket)) {
-                console.log(label + "No socket");
+                console.debug(label + "No socket");
             } else {
                 var state;
                 switch (socket.readyState) {
@@ -62,8 +39,34 @@ Application.Services.factory('msgrSrvc', ["$q", "$rootScope", function($q, $root
                         state = "closed";
                         break;
                 }
-                console.log(label + "Socket " + state)
+                console.debug(label + "Socket " + state)
             }
+        };
+        var configure = function() {
+            socket.onopen = function() {
+                apply(function() {
+                    state.connected = true;
+                });
+                logConnection();
+            };
+            socket.onclose = function() {
+                apply(function() {
+                    state.connected = false;
+                });
+                logConnection();
+            };
+            socket.onmessage = function(response) {
+                var data = JSON.parse(response.data);
+                console.debug(data);
+                var purpose = data.purpose;
+                delete data.purpose;
+                if (callbacks[purpose]) {
+                    var callback = callbacks[purpose];
+                    for (var i in callback) {
+                        callback[i](data);
+                    }
+                }
+            };
         };
         var connect = function(url) {
             if (socket instanceof WebSocket && socket.URL !== url) {
@@ -74,11 +77,16 @@ Application.Services.factory('msgrSrvc', ["$q", "$rootScope", function($q, $root
                 socket = new WebSocket(url);
                 configure();
             }
-            log();
+            logConnection();
         };
-        var send = function(msg) {
+        var send = function(purpose, content) {
+            var data = {
+                purpose: purpose,
+                content: content,
+            };
+            var json = JSON.stringify(data);
             if (state.connected) {
-                socket.send(msg);
+                socket.send(json);
             }
         };
         var disconnect = function() {
@@ -89,6 +97,7 @@ Application.Services.factory('msgrSrvc', ["$q", "$rootScope", function($q, $root
             connected: false
         };
         return {
+            register: register,
             connect: connect,
             send: send,
             disconnect: disconnect,

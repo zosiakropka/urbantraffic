@@ -1,0 +1,6 @@
+<div ng-controller="elemsCtrl">
+
+    <ng-include src="'msgr/msgr-partial.html'"></ng-include>
+    <ng-include src="'params/params-partial.html'" ng-show="connectionState.connected"></ng-include>
+    <ng-include src="'simulation/simulation-partial.html'" ng-show="simulationState.running"></ng-include>
+</div>

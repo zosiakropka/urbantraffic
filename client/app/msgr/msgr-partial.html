@@ -4,8 +4,10 @@
         <input type="submit" ng-click="connect(conn_url)" value="Connect" ng-hide="state.connected"/>
         <input type="button" ng-click="disconnect()" value="Disconnect" ng-show="state.connected"/>
     </ng-form>
+    <!-- // test for sending messages
     <ng-form ng-show="state.connected">
         <input type="text" ng-model="message" ng-init="message='TestMessage'"/>
         <input type="submit" ng-click="send(message)" value="Send"/>
     </ng-form>
+    -->
 </div>

@@ -1,3 +1,12 @@
 <div ng-controller="paramsCtrl">
-    <input type="range" ng-model="busFrequency" ng-change="move()"/>
+    <div>
+        <input type="range" ng-model="busIntervals.horizontal" max="40" min="1" ng-change="intifyRange()"/>{{busIntervals.horizontal}}
+        <input type="number" ng-model="busIntervals.horizontal" max="40" min="1"/>
+        <br/>
+        <input type="range" ng-model="busIntervals.vertical" max="40" min="1" ng-change="intifyRange()"/>{{busIntervals.vertical}}
+        <input type="number" ng-model="busIntervals.vertical" max="40" min="1"/>
+    </div>
+    <div>
+        <input type="submit" value="Run" ng-click="submit_params()"/>
+    </div>
 </div>
