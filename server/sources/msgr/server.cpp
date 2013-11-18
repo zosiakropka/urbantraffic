@@ -9,7 +9,8 @@
 
 
 #include "../../headers/msgr/server.h"
-#include "../../headers/msgr/connection.h"
+#include "../../headers/simulation/simulator.h"
+#include "boost/system/error_code.hpp"
 
 unsigned int Msgr::port = 0;
 Msgr::WSServer Msgr::server;
@@ -36,8 +37,11 @@ void Msgr::stop_server() {
 }
 
 void Msgr::on_open(websocketpp::connection_hdl hdl) {
+
     int conn_id = conns.size();
-    MsgrConn conn(conn_id, hdl);
+    SimulationMngr* mngr = new SimulationMngr();
+    MsgrConn conn(conn_id, hdl, mngr);
+    mngr->setConnection(conn);
 
     Msgr::conns[hdl] = conn;
     cout << "Connection " << conn.getId() << endl;
@@ -49,8 +53,9 @@ void Msgr::on_message(websocketpp::connection_hdl hdl, WSServer::message_ptr msg
 }
 
 void Msgr::send(websocketpp::connection_hdl hdl, string msg) {
-//    WSServer::message_ptr msg_ptr;
-//    const char* msg_char = msg.c_str();
-//    msg_ptr.get()->get_payload().append(msg_char);
-    Msgr::server.send(hdl, msg, websocketpp::frame::opcode::TEXT);
+    try {
+        Msgr::server.send(hdl, msg, websocketpp::frame::opcode::TEXT);
+    } catch (boost::system::error_code ec) {
+        cout << "Error while sending message, ec=" << ec.value() << endl;
+    }
 }

@@ -11,20 +11,24 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 #include <iostream>
+#include <string>
+#include "message.h"
 using namespace std;
+
+class MsgrSubscriber;
 
 class MsgrConn {
 public:
-    MsgrConn(int id, websocketpp::connection_hdl hdl);
+    MsgrConn(int id, websocketpp::connection_hdl hdl, MsgrSubscriber* subscriber);
     MsgrConn();
     int getId();
     void on_message(string message);
+    void send(string message);
 
 private:
     int id;
     websocketpp::connection_hdl hdl;
-    void send(string message);
-
+    MsgrSubscriber* subsrciber;
 };
 
 #endif	/* MSGRCONN_H */

@@ -7,15 +7,16 @@
 
 #include "../../headers/msgr/connection.h"
 #include "../../headers/msgr/server.h"
+#include "../../headers/msgr/subscriber.h"
 
 MsgrConn::MsgrConn() {
-    //    hdl = NULL;
-    //    id = -1;
+    id = -1;
 }
 
-MsgrConn::MsgrConn(int i, websocketpp::connection_hdl h) {
+MsgrConn::MsgrConn(int i, websocketpp::connection_hdl h, MsgrSubscriber* s) {
     id = i;
     hdl = h;
+    subsrciber = s;
 }
 
 int MsgrConn::getId() {
@@ -23,9 +24,7 @@ int MsgrConn::getId() {
 }
 
 void MsgrConn::on_message(string message) {
-    cout << "Message: " << message << endl;
-    
-    send(message);
+    subsrciber->on_message(message);
 }
 
 void MsgrConn::send(string message) {

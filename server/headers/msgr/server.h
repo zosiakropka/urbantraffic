@@ -12,7 +12,9 @@
 #include <websocketpp/server.hpp>
 #include <iostream>
 #include <map>
+#include <string>
 #include "connection.h"
+#include "subscriber.h"
 
 using namespace std;
 
@@ -32,7 +34,6 @@ private:
     static unsigned int port;
     static void on_message(websocketpp::connection_hdl hdl, WSServer::message_ptr msg);
     static void on_open(websocketpp::connection_hdl hdl);
-
 
     static Conns conns;
 };
